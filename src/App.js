@@ -46,17 +46,20 @@ function Loginn(props) {
 
   return (
     <div>
-      <form >
+      {logged ? null : <form onSubmit={(e) => {e.preventDefault()}} >
         <label>
-          name: <input type={"text"} name="name" value={fuser.name} onChange={(e) => {setUser({...fuser, [e.target.name]: e.target.value})}} />
+          <input placeholder='name' type={"text"} name="name" value={fuser.name} onChange={(e) => {setUser({...fuser, [e.target.name]: e.target.value})}} />
           <br/>
-          passwd: <input type={"password"} name="passwd" value={fuser.passwd} onChange={(e) => {setUser({...fuser, [e.target.name]: e.target.value})}} />
+          <input  placeholder='passwd' type={"password"} name="passwd" value={fuser.passwd} onChange={(e) => {setUser({...fuser, [e.target.name]: e.target.value})}} />
         </label>
+        <br/>
+        <button onClick={(e) => {checkLogin(fuser, props.users,sethmmm);logged = true;checkLogin(fuser, props.users,sethmmm)}} >login</button>
       </form>
-      <button onClick={(e) => {checkLogin(fuser, props.users,sethmmm);logged = true;checkLogin(fuser, props.users,sethmmm)}} >login</button>
+      }
+      
       {logged ? <br/> : <br/>}
-      {!logged ? null : <button onClick={(e) => {unloggin()}} >hello</button>}
-      {!logged ? null : <h2>{hmmm}</h2>}
+      {!logged ? null : <button onClick={(e) => {unloggin()}} >log out</button>}
+      {!logged ? null : <h2>{hmmm} <br/> you are logged in as {fuser.name}</h2>}
     </div>
   )
 }
