@@ -1,3 +1,10 @@
-.App {
+
+
+.Form{
+  display: grid;
+  gap: 0;
+  grid-template-columns: auto auto;
   text-align: center;
+  margin: 40vh 0;
 }
+
