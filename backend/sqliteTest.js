@@ -2,6 +2,7 @@ const sqlite3 = require('sqlite3');
 const uuid = require('uuid');
 const express = require("express")
 const cors = require("cors")
+const md5 = require("md5");
 
 var app = express()
 
@@ -85,10 +86,14 @@ function dropTable(newdb, tbname){
     })
 }
 
+function hash(str){
+    return md5(str)
+}
+
 function addUser(newdb, tbname, name, passwd){
     var query = `
     insert into accounts (name, passwd) 
-        values ('` + name + `', '` + passwd + `')`
+        values ('` + name + `', '` + hash(passwd) + `')`
     
     newdb.run(query, (err) => {
         if (err){
@@ -130,10 +135,11 @@ function deleteUser(newdb, tbname, id){
 }
 
 function sendMessage(newdb, name, content){
+    let con = content.split("%20").join(" ")
     var query = `
     insert into msg (name, content) 
-        values ('` + name + `', '` + content + `')`
-    
+        values ('` + name + `', '` + con + `')`
+        
         newdb.run(query, (err) => {
             if(err){
                 console.log(err)
