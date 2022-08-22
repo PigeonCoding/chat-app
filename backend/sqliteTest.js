@@ -41,7 +41,7 @@ const writethings = (content, file) => {
         }
     )
 }
-app.use(cors())
+
 
 function querryUsers(req){
     db.all("SELECT id, name, passwd FROM accounts", (err, rows) => {
@@ -57,7 +57,7 @@ function querryUsers(req){
 }
 });}
 
-function addTable(newdb, tbname){
+function addUserTable(newdb, tbname){
     var query = `
     create table `+ tbname +`(
         id integer primary key AUTOINCREMENT,
@@ -114,7 +114,64 @@ function deleteUser(newdb, tbname, id){
     })
 }
 
+function deleteUser(newdb, tbname, id){
+    var query = `
+        delete from ` + tbname + `
+        where id = ` + id +`;
+    `
+    console.log(query)
+    newdb.run(query, (err) => {
+        if (err) {
+            console.log(err)
+        }else{
+            console.log("removed user with id: " + id)
+        }
+    })
+}
 
+function sendMessage(newdb, name, content){
+    var query = `
+    insert into msg (name, content) 
+        values ('` + name + `', '` + content + `')`
+    
+        newdb.run(query, (err) => {
+            if(err){
+                console.log(err)
+            }
+            else{
+                console.log("added Msg")
+            }
+        })
+}
+
+function addMsgTable(newdb, tbname){
+    var query = `
+    create table `+ tbname +`(
+        id integer primary key AUTOINCREMENT,
+        name text not null,
+        content text not null
+    );`
+    newdb.run(query, (err) => {
+        if (err){
+            console.log(err)
+        }else{
+            console.log("table created")
+        }
+    })      
+}
+
+function querryMsg(req){
+    db.all("SELECT id, name, content FROM msg", (err, rows) => {
+    if (err){
+        console.log(err)
+    }
+    else{
+        // users = rows
+        req.send(rows)
+    }
+});}
+
+app.use(cors())
 
 app.get("/users", (res, req) => {
     querryUsers(req)
@@ -130,16 +187,23 @@ app.get("*", (res, req) => {
         deleteUser(db, "accounts", aa[2])
         querryUsers(req)
     }
+    else if(aa[1] == "msg"){
+        querryMsg(req)
+    }
+    else if(aa[1] == "addmsg"){
+        sendMessage(db, aa[2], aa[3])
+        querryMsg(req)
+    }
+    else if(aa[1] == "deletemsg"){
+        deleteUser(db, "msg", aa[2])
+        querryMsg(req)
+    }
     else{
         req.send("<h1>not found<h1/>")
     }
 
     
 })
-
-// addTable(db, "accounts")
-// dropTable(db, "accounts")
-// addUser(db, "accounts", "wassim", 'anis')
 
 app.listen(8000, function() {
     console.log("listening to port 8000")
