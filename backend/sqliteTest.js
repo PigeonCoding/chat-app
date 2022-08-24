@@ -2,7 +2,9 @@ const sqlite3 = require('sqlite3');
 const uuid = require('uuid');
 const express = require("express")
 const cors = require("cors")
-const md5 = require("md5");
+const md5 = require("md5")
+const fs = require("fs");
+const path = require("path");;
 
 var app = express()
 
@@ -178,10 +180,18 @@ function querryMsg(req){
 });}
 
 app.use(cors())
+app.use(express.static(path.join(__dirname, '../build')));
 
 app.get("/users", (res, req) => {
     querryUsers(req)
 })
+
+// app.get("/", (res, req) => {
+//     var options = {
+//         root: path.join(__dirname)
+//     };
+//     req.sendFile("../build/index.html", options)
+// })
 
 app.get("*", (res, req) => {
     let aa = (res.url).split("/")

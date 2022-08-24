@@ -32,13 +32,13 @@ export default App;
 function App() {
 	const [users, setUsers] = useState([])
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-		  updateList(setUsers)
-		}, 60000);
+	// useEffect(() => {
+	// 	const interval = setInterval(() => {
+	// 	  updateList(setUsers)
+	// 	}, 60000);
 	  
-		return () => clearInterval(interval);
-	  }, [])
+	// 	return () => clearInterval(interval);
+	//   }, [])
 
 	if(ran){client.get("/users").then((res) => {setUsers(res.data);ran=false})}
 
@@ -83,7 +83,7 @@ function Loginn(props) {
 					<h4>sign in</h4>
 					<input placeholder='name' type={"text"} name="name" value={fuser.name} onChange={(e) => {setUser({...fuser, [e.target.name]: e.target.value})}} />
 					<br/>
-					<input  placeholder='passwd' type={"password"} name="passwd" value={fuser.passwd} onChange={(e) => {setUser({...fuser, [e.target.name]: e.target.value})}} />
+					<input placeholder='passwd' type={"password"} name="passwd" value={fuser.passwd} onChange={(e) => {setUser({...fuser, [e.target.name]: e.target.value})}} />
 					<br/>
 					<button onClick={(e) => {signIn(fuser, props.setUsers, props.users, sethmmm, setUser);logged = true}}> sign in </button>
 				</label>
@@ -139,17 +139,20 @@ function MainApp(props){
 		<div className='center' >
 			<p>currently logged in as {currentUser.name} <button onClick={(e) => {removeAcount(currentUser)}}>!!!delete account!!!</button> </p>
 			<button onClick={(e) => {props.unloggin()}} >log out</button>
-			{msg.map((e) => 
-				<div key={uuid()}>
-					<p>{e.name}: {e.content}  <button onClick={(g) => {deleteMsg(e, currentUser)}} >delete</button> </p>
+			<div className='cardGrid'>
+			{msg.slice().reverse().map((e) => 
+				<div key={uuid()} className="msgCard">
+					<p key={uuid()} >{e.name}: {e.content} <button onClick={(g) => {deleteMsg(e, currentUser)}} >delete</button></p>
+					
 				</div>
 			)}
+			</div>
 			<form onSubmit={(e) => {
 				e.preventDefault()
 				if(currentMsg !== ""){sendMsg(currentMsg, setCurrentMsg)}
 			}}>
-				<div>
-					<input placeholder='type your message' value={currentMsg} type={"text"} onChange={(e) => {setCurrentMsg(e.target.value)}} />
+				<div className='msgInput' onSubmit={(e) => {e.preventDefault()}}>
+					<input placeholder='type your message' value={currentMsg} type={"text"} onChange={(e) => {setCurrentMsg(e.target.value)}}></input>
 					<button >send</button>
 				</div>
 			</form>

@@ -1,3 +1,8 @@
+body{
+  background-color: rgb(29, 29, 29);
+  color: white;
+}
+
 .center{
   text-align: center;
 }
@@ -8,5 +13,47 @@
   grid-template-columns: auto auto;
   text-align: center;
   margin: 35vh 0;
+}
+
+input{
+  border: 0;
+  background-color: rgb(63, 63, 63);
+  color: white;
+  outline: none;
+}
+
+.msgInput{
+  position: fixed;
+  left: 50%;
+  bottom: -4vh;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  width: 100%; 
+}
+
+.msgInput > input{
+  width: 90%;
+  height: 8vh;
+  font-size: medium;
+}
+.msgInput >button{
+  height: 8vh;
+  width: 6%;
+}
+
+.msgCard{ 
+  background-color: darkblue;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  height: 100px;
+  width: 30vw;
+}
+
+.cardGrid{
+  display: grid;
+  grid-template-rows: auto;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
