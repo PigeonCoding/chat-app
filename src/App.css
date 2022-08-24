@@ -46,8 +46,13 @@ input{
   display: grid;
   justify-content: center;
   align-content: center;
-  height: 100px;
-  width: 30vw;
+  height: fit-content;
+  width: 50vw;
+}
+
+.msgCard > p{
+  background-color: rgb(4, 4, 156);
+  width: 49vw;
 }
 
 .cardGrid{

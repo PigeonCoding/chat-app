@@ -124,6 +124,7 @@ function MainApp(props){
 
 	const [currentMsg, setCurrentMsg] = useState("")
 	const [msg, setMsg] = useState([])
+	const [wantsToSend, setWantsToSend] = useState(false)
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -139,10 +140,14 @@ function MainApp(props){
 		<div className='center' >
 			<p>currently logged in as {currentUser.name} <button onClick={(e) => {removeAcount(currentUser)}}>!!!delete account!!!</button> </p>
 			<button onClick={(e) => {props.unloggin()}} >log out</button>
+			<form onSubmit={(v) =>{ 
+				v.preventDefault()
+				setWantsToSend(!wantsToSend)
+			}} ><button>send a message</button></form>
 			<div className='cardGrid'>
 			{msg.slice().reverse().map((e) => 
 				<div key={uuid()} className="msgCard">
-					<p key={uuid()} >{e.name}: {e.content} <button onClick={(g) => {deleteMsg(e, currentUser)}} >delete</button></p>
+					<p key={uuid()} >{e.name}<br/><br/> {e.content} <br/><br/> <button onClick={(g) => {deleteMsg(e, currentUser)}} >delete</button></p>
 					
 				</div>
 			)}
@@ -150,12 +155,19 @@ function MainApp(props){
 			<form onSubmit={(e) => {
 				e.preventDefault()
 				if(currentMsg !== ""){sendMsg(currentMsg, setCurrentMsg)}
+				setWantsToSend(false)
 			}}>
-				<div className='msgInput' onSubmit={(e) => {e.preventDefault()}}>
-					<input placeholder='type your message' value={currentMsg} type={"text"} onChange={(e) => {setCurrentMsg(e.target.value)}}></input>
-					<button >send</button>
-				</div>
+				{wantsToSend && <TypeMsg currentMsg={currentMsg} setCurrentMsg={setCurrentMsg} />}
 			</form>
+		</div>
+	)
+}
+
+function TypeMsg(props){
+	return(
+		<div className='msgInput' onSubmit={(e) => {e.preventDefault()}}>
+			<input autoFocus placeholder='type your message' value={props.currentMsg} type={"text"} onChange={(e) => {props.setCurrentMsg(e.target.value)}}></input>
+			<button >send</button>
 		</div>
 	)
 }
